@@ -27,6 +27,8 @@ spec:
         - /manager
         args:
         - --enable-leader-election
+        - --storage-class=cached-local-path
+        - --pod-annotation=pvc-remover.mgoltzsche.github.com/no-pvc-protection
         image: controller:latest
         name: manager
         resources:
