@@ -1,5 +1,6 @@
 # Binary built by go build
 pvc-remover
+manager
 
 # Binaries for programs and plugins
 *.exe

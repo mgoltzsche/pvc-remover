@@ -1,15 +1,7 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    control-plane: controller-manager
-  name: system
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: controller-manager
-  namespace: system
   labels:
     control-plane: controller-manager
 spec:
@@ -22,15 +14,21 @@ spec:
       labels:
         control-plane: controller-manager
     spec:
+      serviceAccountName: controller-manager
       containers:
-      - command:
+      - name: manager
+        image: mgoltzsche/pvc-remover:latest
+        command:
         - /manager
         args:
         - --enable-leader-election
-        - --storage-class=cached-local-path
+        - --storage-class=cache
         - --pod-annotation=pvc-remover.mgoltzsche.github.com/no-pvc-protection
-        image: controller:latest
-        name: manager
+        env:
+        - name: WATCH_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         resources:
           limits:
             cpu: 100m

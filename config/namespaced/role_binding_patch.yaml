@@ -1,0 +1,5 @@
+- op: replace
+  path: /kind
+  value: RoleBinding
+- op: remove
+  path: /subjects/0/namespace

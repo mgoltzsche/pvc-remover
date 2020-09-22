@@ -168,14 +168,17 @@ var _ = BeforeSuite(func(done Done) {
 }, 60)
 
 var _ = AfterSuite(func() {
-	By("tearing down the test environment")
-	podDelErr := k8sClient.Delete(context.TODO(), podCompleted)
-	for _, o := range []runtime.Object{pvMatchingActive, pvMatching, pvOther, pvRestarting} {
-		k8sClient.Delete(context.TODO(), o)
+	By("tearing down the test environmentx")
+	var podDelErr error
+	if k8sClient != nil {
+		podDelErr = k8sClient.Delete(context.TODO(), podCompleted)
+		for _, o := range []runtime.Object{pvMatchingActive, pvMatching, pvOther, pvRestarting} {
+			k8sClient.Delete(context.TODO(), o)
+		}
+		k8sClient.Delete(context.TODO(), namespaceResource)
+		k8sClient.Delete(context.TODO(), storageClassOther)
+		k8sClient.Delete(context.TODO(), storageClassPodMatching)
 	}
-	k8sClient.Delete(context.TODO(), namespaceResource)
-	k8sClient.Delete(context.TODO(), storageClassOther)
-	k8sClient.Delete(context.TODO(), storageClassPodMatching)
 	close(tearDownCh)
 	err := testEnv.Stop()
 	Expect(err).ToNot(HaveOccurred())

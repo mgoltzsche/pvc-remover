@@ -1,0 +1,28 @@
+namePrefix: pvc-remover-
+
+commonLabels:
+  app: pvc-remover
+
+bases:
+- ../rbac
+- ../manager
+
+patchesJson6902:
+- target:
+    group: rbac.authorization.k8s.io
+    version: v1
+    kind: ClusterRole
+    name: manager-role
+  path: role_patch.yaml
+- target:
+    group: rbac.authorization.k8s.io
+    version: v1
+    kind: ClusterRoleBinding
+    name: manager-rolebinding
+  path: role_binding_patch.yaml
+- target:
+    version: v1
+    kind: ServiceAccount
+    name: controller-manager
+    namespace: system
+  path: service_account_patch.yaml

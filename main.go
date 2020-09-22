@@ -50,11 +50,13 @@ func init() {
 }
 
 func main() {
+	var watchNamespace string
 	var metricsAddr string
 	var enableLeaderElection bool
 	podAnnotationSelectors := selectorsFlag{LabelsFn: getAnnotations}
 	podLabelSelectors := selectorsFlag{LabelsFn: getLabels}
 	storageClassSelector := map[string]struct{}{}
+	flag.StringVar(&watchNamespace, "namespace", "", "The namespace that is watched")
 	flag.StringVar(&metricsAddr, "metrics-addr", ":8080", "The address the metric endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "enable-leader-election", false,
 		"Enable leader election for controller manager. "+
@@ -66,6 +68,10 @@ func main() {
 
 	ctrl.SetLogger(zap.New(zap.UseDevMode(true)))
 
+	if watchNamespace == "" {
+		watchNamespace = os.Getenv("WATCH_NAMESPACE")
+	}
+
 	if len(storageClassSelector) == 0 {
 		setupLog.Error(nil, "CLI option --storage-class was not specified (must restrict PVC removal to ephemeral storage classes)")
 		os.Exit(1)
@@ -73,6 +79,7 @@ func main() {
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:             scheme,
+		Namespace:          watchNamespace,
 		MetricsBindAddress: metricsAddr,
 		Port:               9443,
 		LeaderElection:     enableLeaderElection,
