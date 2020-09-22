@@ -17,7 +17,7 @@ spec:
       serviceAccountName: controller-manager
       containers:
       - name: manager
-        image: mgoltzsche/pvc-remover:latest
+        image: mgoltzsche/pvc-remover:0.1.0
         command:
         - /manager
         args:

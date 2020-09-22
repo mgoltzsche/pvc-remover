@@ -3,9 +3,9 @@
 Kubernetes controllers to remove a `PersistentVolumeClaim` (PVC) of a particular
 `StorageClass` when an associated `Pod` is completed.  
 
-This project's primary purpose is the early deletion of [jobcachefs](https://github.com/mgoltzsche/jobcachefs)
-volumes so that the volume contents can be committed and quickly reused
-for the next (build) job.  
+This project's primary purpose is the early deletion of volumes provisioned by
+[cache-provisioner](https://github.com/mgoltzsche/cache-provisioner) so that the
+volume contents can be committed and quickly reused for the next (build) job.  
 
 ## How it works
 
