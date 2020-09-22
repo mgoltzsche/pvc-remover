@@ -3,4 +3,5 @@ kind: Namespace
 metadata:
   labels:
     control-plane: controller-manager
+    app: pvc-remover
   name: pvc-remover-system

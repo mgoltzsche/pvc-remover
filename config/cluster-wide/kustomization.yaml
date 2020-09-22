@@ -1,0 +1,13 @@
+namespace: pvc-remover-system
+
+namePrefix: pvc-remover-
+
+commonLabels:
+  app: pvc-remover
+
+bases:
+- ../rbac
+- ../manager
+
+patchesStrategicMerge:
+- manager_patch.yaml
